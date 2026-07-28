@@ -41,6 +41,16 @@
                 Edit
             </a>
 
+            <form action="{{ route('contacts.destroy', $contact) }}" method="POST" class="d-inline">
+                @csrf
+                @method('DELETE')
+
+                <button class="btn btn-danger">
+                    <i class="bi bi-trash"></i>
+                    Delete
+                </button>
+            </form>
+
         </div>
 
     </div>
