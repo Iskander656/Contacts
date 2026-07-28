@@ -1,11 +1,25 @@
-<h1>All Contacts</h1>
+@extends('layouts.app')
 
-@foreach ($contacts as $contact)
-    <p>{{ $contact->first_name }}
-        {{ $contact->last_name }}
-    </p>
-@endforeach
+@section('content')
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-{{-- Pagination Links --}}
-{{ $contacts->links() }}
-{{-- Pagination Links --}}
+        <h1>Contacts</h1>
+        <a href="{{ route('contacts.create') }}" class="btn btn-primary">
+
+            <i class="bi bi-plus-circle"></i>
+
+            New Contact
+        </a>
+
+    </div>
+
+    <div class="row">
+
+        @foreach ($contacts as $contact)
+            <x-contact-card :contact="$contact" />
+        @endforeach
+
+    </div>
+
+    {{ $contacts->links() }}
+@endsection
