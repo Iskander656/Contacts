@@ -8,9 +8,22 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $contacts = Contact::latest()->paginate(10);
+        $search = $request->search;
+
+        $contacts = Contact::query()
+            ->when($search, function ($query) use ($search) {
+
+                $query->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+
         return view('contacts.index', compact('contacts'));
     }
 
@@ -57,9 +70,34 @@ class ContactController extends Controller
     }
 
 
-    public function destroy(Contact $contact) {
+    public function destroy(Contact $contact)
+    {
         $contact->delete();
-        
+
         return redirect()->route('contacts.index')->with('success', 'Contact deleted successfully!');
+    }
+
+    public function show(Contact $contact)
+    {
+        return view('contacts.show', compact('contact'));
+    }
+
+
+    public function favorite(Contact $contact) {
+        $contact->update([
+            'favorite' => !$contact->favourite
+            // The "!" means reverse
+        ]);
+        
+        return back();
+    }
+
+    public function favorites()
+    {
+        $contacts = Contact::where('favourite', true)
+        ->latest()
+        ->paginate(10);
+        
+        return view('contacts.index', compact('contacts'));
     }
 }

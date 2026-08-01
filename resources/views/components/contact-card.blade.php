@@ -36,6 +36,14 @@
 
             </p>
 
+            <a href="{{ route('contacts.show', $contact) }}" class="btn btn-primary">
+
+                <i class="bi bi-eye"></i>
+                View
+            </a>
+
+
+
             <a href="{{ route('contacts.edit', $contact) }}" class="btn btn-warning">
                 <i class="bi bi-pencil"></i>
                 Edit
@@ -48,6 +56,18 @@
                 <button class="btn btn-danger">
                     <i class="bi bi-trash"></i>
                     Delete
+                </button>
+            </form>
+
+            <form action="{{ route('contacts.favorite', $contact) }}" method="POST" class="d-inline">
+                @csrf
+
+                <button class="btn btn-outline-warning">
+                    @if ($contact->favourite)
+                        ⭐ Remove Favourite
+                    @else
+                        ☆ Add Favourite
+                    @endif
                 </button>
             </form>
 
